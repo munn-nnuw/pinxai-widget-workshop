@@ -719,6 +719,143 @@ AIが回答時にサンプルを参照する利用（可／不可／条件付き
         </div>
       </details>
 
+      <details class="sample" id="draft-batch">
+        <summary><strong>複数の操作をまとめて入力する</strong><span class="description">選んだ操作を見直し、順番どおりにまとめて下書きへ入れる。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>何をするか一つずつ選び、まとめて送る前に順番を確認したいとき。</dd>
+            <dt>試し方</dt><dd>二つ選んで一覧を確認し、「まとめて入力欄に入れる」を押します。選んだ順に別の行へ入り、送信前に編集できます。</dd>
+          </dl>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">Pinxai ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：複数の操作をまとめて入力する
+何をするか：選んだ操作を一覧で見直し、押した順にまとめてチャットの下書きに入れる。
+提供者の表示名：ウィジェット相談室（設計協力：Rinさん）
+元の作品・投稿・配布ページ（公開URL、任意）：はじめてのウィジェット（Rinさん寄稿）
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxai作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロの後、探索の操作候補を選べる返答の末尾。
+ウィジェット名／関数名：操作をまとめて下書き／DraftBatch
+常時有効の設定／トリガーキーワード：試験用作品で空いていればオン。設定なし。既存の常時有効枠を使っている作品では、切り替える前に起動条件を相談する。
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし。
+タグで受け取る値：actions は操作文の配列。空・不明なら候補なし。選んだ操作はこの表示内で保持し、入力欄への挿入が成功したら同じ表示からの再挿入を止める。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロの後、探索で選べる操作がある返答の末尾に &lt;DraftBatch actions={["広場を調べる", "店主に話を聞く", "工房へ向かう"]} /&gt; の形のタグを一つ、コード枠を使わずに出す。actions は主人公が今選べる一行の行動文を最大5件。例を物語の事実にしない。最新の送信済み入力にある、行頭が「!行動 」の明示行だけを上から順に処理し、引用や過去の入力の行は扱わない。先の行動で状況が変わり後の行動が成立しない場合は、その理由を描く。選択や下書きへの挿入のみで行動を成立させない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;DraftBatch actions={["広場を調べる", "店主に話を聞く", "工房へ向かう"]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function DraftBatch({ actions }) {
+  const validActions = Array.isArray(actions)
+    ? actions.filter(action =&gt; typeof action === 'string' &amp;&amp; !/[\r\n]/.test(action))
+      .map(action =&gt; action.trim()).filter(Boolean)
+    : [];
+  const options = [...new Set(validActions)].slice(0, 5);
+  const [selected, setSelected] = useState([]);
+  const [status, setStatus] = useState('ready');
+  const locked = useRef(false);
+  const queue = selected.filter(action =&gt; options.includes(action));
+  const disabled = status === 'pending' || status === 'done';
+
+  function toggle(action) {
+    if (locked.current) return;
+    setStatus('ready');
+    setSelected(current =&gt; {
+      const active = current.filter(value =&gt; options.includes(value));
+      return active.includes(action) ? active.filter(value =&gt; value !== action) : [...active, action];
+    });
+  }
+
+  async function insertDraft() {
+    if (locked.current || !queue.length) return;
+    locked.current = true;
+    setStatus('pending');
+    try {
+      const draft = '\n' + queue.map(action =&gt; '!行動 ' + action).join('\n');
+      const result = await pinx.chat.insertText(draft);
+      if (result?.ok) {
+        setStatus('done');
+        return;
+      }
+    } catch {
+      // 入力欄が使えない場合も、選んだ操作を残して再試行できるようにする。
+    }
+    locked.current = false;
+    setStatus('error');
+  }
+
+  if (!options.length) return &lt;p&gt;操作の候補がありません。&lt;/p&gt;;
+
+  return (
+    &lt;section aria-label="操作をまとめて下書き" style={{ padding: 12, overflowWrap: 'anywhere' }}&gt;
+      &lt;p&gt;候補を選ぶと、入れる予定に追加されます。もう一度押すと外れます。&lt;/p&gt;
+      &lt;div style={{ display: 'grid', gap: 6 }}&gt;
+        {options.map(action =&gt; (
+          &lt;button key={action} type="button" aria-pressed={queue.includes(action)} disabled={disabled}
+            style={{ minHeight: 44, whiteSpace: 'normal', overflowWrap: 'anywhere' }} onClick={() =&gt; toggle(action)}&gt;
+            {queue.includes(action) ? '✓ ' : ''}{action}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+      &lt;p&gt;入れる予定&lt;/p&gt;
+      {queue.length ? &lt;ol&gt;{queue.map(action =&gt; &lt;li key={action}&gt;{action}&lt;/li&gt;)}&lt;/ol&gt; : &lt;p&gt;まだ選ばれていません。&lt;/p&gt;}
+      &lt;button type="button" disabled={disabled || !queue.length} onClick={insertDraft}&gt;
+        まとめて入力欄に入れる
+      &lt;/button&gt;
+      &lt;p role="status"&gt;
+        {status === 'done' &amp;&amp; '下書きに入りました。内容を確認して送信してください。'}
+        {status === 'error' &amp;&amp; '入力できませんでした。入力欄が使える状態で、もう一度押してください。'}
+      &lt;/p&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：ライブプレビューで候補をB→Aと選び、Aを外してCを選ぶ。最初の選択から一度も確定しない間に入力欄への処理が起きないことを確認。プレビューチャットで元の下書き一行を入れ、B→Cを選んでまとめるボタンを連続で押す。入力できない間に押した場合は、入力可能になってから同じ選択で再試行する。
+期待する結果：選んだ順のB・Cだけを、元の下書きの次の行から一度ずつ挿入する。送信前に編集でき、送信するまで行動は成立しない。失敗時は選択が残る。
+実際に確認した場所・日付・結果（未確認ならその旨）：Pinxai実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：既存の下書きとつながらないよう先頭に改行を付ける。入力欄が空のときの先頭改行はプレビューチャットで確認。送信前に選び直したい場合は、入力欄で該当行を編集する。</pre>
+              </div>
+            </div>
+          </details>
+        </div>
+      </details>
+
       <details class="sample" id="mode-command">
         <summary><strong>モードとコマンドの下書き</strong><span class="description">探索や休息などへの変更希望を入力欄に入れる。</span></summary>
         <div class="sample-body">
