@@ -56,7 +56,7 @@
     .status { color: #302b81; font-size: .9rem; margin-top: .45rem; }
     .status:empty { display: none; }
     .manual { margin-top: .8rem; color: var(--muted); }
-    .manual p, .testing { font-size: .9rem; }
+    .manual p, .copy-fallback { font-size: .9rem; }
     textarea {
       display: block;
       width: 100%;
@@ -70,7 +70,7 @@
       font: inherit;
       resize: vertical;
     }
-    .testing { margin-top: 1rem; color: var(--muted); }
+    .copy-fallback { margin-top: 1rem; color: var(--muted); }
     .section { margin-top: 1.7rem; }
     .faq { background: #fff; border: 1px solid var(--line); border-radius: .9rem; }
     details { min-width: 0; }
@@ -130,7 +130,7 @@
   <main>
     <header class="hero">
       <h1>PinxAI ウィジェット相談室</h1>
-      <p class="lead">初めてのウィジェットを、AIと相談しながら一つ作るための開始プロンプトです。アイデア出しから、PinxAIの各欄に貼る原稿と試し方まで案内します。</p>
+      <p class="lead">プログラミングについて何もしらなくても、ChatGPTやGeminiにウィジェットを作ってもらうためのプロンプトです。アイデア出しや仕様の相談から、PinxAIの各欄に貼る原稿と試し方まで案内します。</p>
       <p class="meta"><strong>最新版 <span id="prompt-version">v1.0</span></strong><span>公開試験版 · <time datetime="2026-11-20">2026年11月20日</time></span></p>
       <div class="actions">
         <button class="copy" id="copy-prompt" type="button" disabled>最新版をコピー</button>
@@ -142,8 +142,7 @@
         <p>欄の中を選択して、全文をコピーしてください。</p>
         <textarea id="prompt-text" readonly aria-label="開始プロンプトの全文" spellcheck="false"></textarea>
       </details>
-      <noscript><p class="testing">コピーするにはテキスト版を開いてください。</p></noscript>
-      <p class="testing">開発中のGemini試験で、原稿生成・保存版からの再開を確認しました。公開版での再試験、ChatGPT無料版、PinxAI実機は未確認です。</p>
+      <noscript><p class="copy-fallback">コピーするにはテキスト版を開いてください。</p></noscript>
     </header>
 
     <section class="section" aria-labelledby="faq-title">
