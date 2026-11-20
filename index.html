@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PinxAIで初めてのウィジェットを作るための相談プロンプト。最新版をコピーできます。">
+  <meta name="description" content="Pinxaiで初めてのウィジェットを作るための相談プロンプト。最新版をコピーできます。">
   <meta name="theme-color" content="#f5f5fb">
-  <title>PinxAI ウィジェット相談室</title>
+  <title>Pinxai ウィジェット相談室</title>
   <style>
     :root {
       color-scheme: light;
@@ -78,6 +78,15 @@
     .faq details + details { border-top: 1px solid var(--line); }
     .faq summary { padding: .75rem 1rem; font-weight: 700; }
     .faq details > p { padding: 0 1rem .85rem; color: var(--muted); }
+    .sample-intro {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: .9rem;
+    }
+    .sample-examples { margin: 0 0 .75rem; padding-left: 1.4rem; }
+    .sample-examples li + li { margin-top: .25rem; }
+    .sample-index-link { font-weight: 700; }
     .changes { margin: 0; padding: 0; list-style: none; }
     .changes li { border-top: 1px solid var(--line); padding: .75rem 0; }
     .changes h3 { display: flex; flex-wrap: wrap; gap: 0 .65rem; }
@@ -101,7 +110,7 @@
         const response = await fetch("./start-prompt.txt", { cache: "no-cache" });
         if (!response.ok) throw new Error("Prompt unavailable");
         prompt = await response.text();
-        const versionMatch = /^PinxAI ウィジェット相談室 (v\d+\.\d+(?:\.\d+)?)(?:\r?\n|$)/.exec(prompt);
+        const versionMatch = /^Pinx(?:ai|AI) ウィジェット相談室 (v\d+\.\d+(?:\.\d+)?)(?:\r?\n|$)/.exec(prompt);
         if (!versionMatch) throw new Error("Prompt format mismatch");
         version.textContent = versionMatch[1];
         raw.value = prompt;
@@ -129,8 +138,8 @@
 <body>
   <main>
     <header class="hero">
-      <h1>PinxAI ウィジェット相談室</h1>
-      <p class="lead">プログラミングについて何もしらなくても、ChatGPTやGeminiにウィジェットを作ってもらうためのプロンプトです。アイデア出しや仕様の相談から、PinxAIの各欄に貼る原稿と試し方まで案内します。</p>
+      <h1>Pinxai ウィジェット相談室</h1>
+      <p class="lead">プログラミングについて何もしらなくても、ChatGPTやGeminiにウィジェットを作ってもらうためのプロンプトです。アイデア出しや仕様の相談から、Pinxaiの各欄に貼る原稿と試し方まで案内します。</p>
       <p class="meta"><strong>最新版 <span id="prompt-version">v1.0</span></strong><span>公開試験版 · <time datetime="2026-11-20">2026年11月20日</time></span></p>
       <div class="actions">
         <button class="copy" id="copy-prompt" type="button" disabled>最新版をコピー</button>
@@ -150,7 +159,7 @@
       <div class="faq">
         <details>
           <summary>プログラミング未経験でも使えますか？</summary>
-          <p>作りたいものを一言で伝えると、AIが必要なことを一緒に決め、PinxAIのどの欄に何を貼るかまで案内します。</p>
+          <p>作りたいものを一言で伝えると、AIが必要なことを一緒に決め、Pinxaiのどの欄に何を貼るかまで案内します。</p>
         </details>
         <details>
           <summary>最初に何をすればいいですか？</summary>
@@ -171,6 +180,18 @@
       </div>
     </section>
 
+    <section class="section" aria-labelledby="samples-title">
+      <h2 id="samples-title">参考資料・サンプル集</h2>
+      <div class="sample-intro">
+        <ul class="sample-examples">
+          <li><a href="./samples.html#info-card">日時・現在地カード</a></li>
+          <li><a href="./samples.html#draft-action">行動を下書きに入れる</a></li>
+          <li><a href="./samples.html#inventory-list">所持品を引き継ぐ</a></li>
+        </ul>
+        <a class="sample-index-link" href="./samples.html">サンプル集を見る</a>
+      </div>
+    </section>
+
     <section class="section" aria-labelledby="changes-title">
       <h2 id="changes-title">更新履歴</h2>
       <ol class="changes">
@@ -181,7 +202,6 @@
       </ol>
       <div class="links">
         <a href="https://github.com/munn-nnuw/pinxai-widget-workshop/commits/main/start-prompt.txt">開始プロンプトの変更履歴</a>
-        <a href="https://github.com/munn-nnuw/widget-reference">参考資料・サンプル集</a>
       </div>
     </section>
   </main>
