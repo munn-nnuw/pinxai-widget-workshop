@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PinxAIで初めてのウィジェットを作るための相談プロンプト。最新版をコピーできます。">
+  <meta name="theme-color" content="#f5f5fb">
+  <title>PinxAI ウィジェット相談室</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+      color: #20213b;
+      background: #f5f5fb;
+      line-height: 1.7;
+      --muted: #545571;
+      --line: #dedff0;
+      --accent: #423baf;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(100% - 2rem, 45rem); margin: 0 auto; padding: clamp(1.25rem, 5vw, 4rem) 0 3rem; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(1.65rem, 5.7vw, 2.65rem); letter-spacing: -.045em; line-height: 1.35; }
+    h2 { margin: 0 0 .75rem; font-size: 1.25rem; }
+    h3 { font-size: 1rem; }
+    .hero {
+      background: linear-gradient(130deg, #fff 50%, #eeedff);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent);
+      border-radius: 1.3rem;
+      padding: clamp(1.1rem, 5vw, 2.5rem);
+    }
+    .lead { margin-top: .75rem; max-width: 37rem; }
+    .meta { display: flex; gap: .45rem; align-items: baseline; flex-wrap: wrap; margin: 1.3rem 0 .65rem; font-size: .9rem; color: var(--muted); }
+    .meta strong { color: #302b81; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; }
+    .copy {
+      min-height: 3rem;
+      padding: .65rem 1.2rem;
+      border: 0;
+      border-radius: .65rem;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy:hover:not(:disabled) { background: #332b90; }
+    .copy:disabled { background: #777495; cursor: default; }
+    a { color: #332b90; text-underline-offset: .18em; }
+    a:focus-visible, button:focus-visible, summary:focus-visible, textarea:focus-visible {
+      outline: 3px solid #6b51e0;
+      outline-offset: 3px;
+    }
+    .status { color: #302b81; font-size: .9rem; margin-top: .45rem; }
+    .status:empty { display: none; }
+    .manual { margin-top: .8rem; color: var(--muted); }
+    .manual p, .testing { font-size: .9rem; }
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 11rem;
+      margin-top: .5rem;
+      padding: .65rem;
+      color: #20213b;
+      background: #fff;
+      border: 1px solid #bdbed7;
+      border-radius: .5rem;
+      font: inherit;
+      resize: vertical;
+    }
+    .testing { margin-top: 1rem; color: var(--muted); }
+    .section { margin-top: 1.7rem; }
+    .faq { background: #fff; border: 1px solid var(--line); border-radius: .9rem; }
+    details { min-width: 0; }
+    summary { cursor: pointer; }
+    .faq details + details { border-top: 1px solid var(--line); }
+    .faq summary { padding: .75rem 1rem; font-weight: 700; }
+    .faq details > p { padding: 0 1rem .85rem; color: var(--muted); }
+    .changes { margin: 0; padding: 0; list-style: none; }
+    .changes li { border-top: 1px solid var(--line); padding: .75rem 0; }
+    .changes h3 { display: flex; flex-wrap: wrap; gap: 0 .65rem; }
+    .changes time { color: var(--muted); font-weight: 400; }
+    .changes p { color: var(--muted); }
+    .links { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin-top: .5rem; font-size: .9rem; }
+    @media (max-width: 25rem) {
+      .copy { width: 100%; }
+    }
+  </style>
+  <script defer>
+    window.addEventListener("DOMContentLoaded", async () => {
+      const copy = document.querySelector("#copy-prompt");
+      const status = document.querySelector("#copy-status");
+      const manual = document.querySelector("#manual-copy");
+      const raw = document.querySelector("#prompt-text");
+      const version = document.querySelector("#prompt-version");
+      let prompt;
+
+      try {
+        const response = await fetch("./start-prompt.txt", { cache: "no-cache" });
+        if (!response.ok) throw new Error("Prompt unavailable");
+        prompt = await response.text();
+        const versionMatch = /^PinxAI ウィジェット相談室 (v\d+\.\d+(?:\.\d+)?)(?:\r?\n|$)/.exec(prompt);
+        if (!versionMatch) throw new Error("Prompt format mismatch");
+        version.textContent = versionMatch[1];
+        raw.value = prompt;
+        manual.hidden = false;
+        copy.disabled = false;
+      } catch {
+        status.textContent = "開始プロンプトを読み込めませんでした。テキスト版を開いてください。";
+        return;
+      }
+
+      copy.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(prompt);
+          status.textContent = "全文をコピーしました。AIの新しいチャットに貼り付けてください。";
+        } catch {
+          manual.open = true;
+          raw.focus();
+          raw.select();
+          status.textContent = "自動でコピーできませんでした。開いた欄から全文をコピーできます。";
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <h1>PinxAI ウィジェット相談室</h1>
+      <p class="lead">初めてのウィジェットを、AIと相談しながら一つ作るための開始プロンプトです。アイデア出しから、PinxAIの各欄に貼る原稿と試し方まで案内します。</p>
+      <p class="meta"><strong>最新版 <span id="prompt-version">v0.7.1</span></strong><span>公開試験版 · <time datetime="2026-11-20">2026年11月20日</time></span></p>
+      <div class="actions">
+        <button class="copy" id="copy-prompt" type="button" disabled>最新版をコピー</button>
+        <a href="./start-prompt.txt">テキスト版を開く</a>
+      </div>
+      <p class="status" id="copy-status" role="status"></p>
+      <details class="manual" id="manual-copy" hidden>
+        <summary>全文を表示して手動でコピー</summary>
+        <p>欄の中を選択して、全文をコピーしてください。</p>
+        <textarea id="prompt-text" readonly aria-label="開始プロンプトの全文" spellcheck="false"></textarea>
+      </details>
+      <noscript><p class="testing">コピーするにはテキスト版を開いてください。</p></noscript>
+      <p class="testing">Geminiでは前版（v0.7）で原稿生成・保存版からの再開を確認。v0.7.1の再生成、ChatGPT無料版、PinxAI実機は未確認です。</p>
+    </header>
+
+    <section class="section" aria-labelledby="faq-title">
+      <h2 id="faq-title">よくある質問</h2>
+      <div class="faq">
+        <details>
+          <summary>プログラミング未経験でも使えますか？</summary>
+          <p>作りたいものを一言で伝えると、AIが必要なことを一緒に決め、PinxAIのどの欄に何を貼るかまで案内します。</p>
+        </details>
+        <details>
+          <summary>最初に何をすればいいですか？</summary>
+          <p>「最新版をコピー」を押して、GeminiやChatGPTなどの新しいチャットに全文を貼って送ってください。</p>
+        </details>
+        <details>
+          <summary>作りたいものがまだ決まっていません</summary>
+          <p>作品のあらすじや紹介文をそのまま貼ると、作品に合う案を最大2つ提案します。「INFOの代わりがほしい」の一言からでも始められます。</p>
+        </details>
+        <details>
+          <summary>原稿ができたら、どうやって試しますか？</summary>
+          <p>まず試験用の作品で、AIの案内に沿って表示やボタンを確認してください。うまくいかなければ、どの手順で何が起きたかを同じチャットに伝えてください。</p>
+        </details>
+        <details>
+          <summary>途中で別のチャットに移れますか？</summary>
+          <p>「保存用を出して」と伝えると、決めた仕様と原稿がまとまります。新しいチャットに、開始プロンプトと保存用一式を貼って続けられます。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="changes-title">
+      <h2 id="changes-title">更新履歴</h2>
+      <ol class="changes">
+        <li>
+          <h3>v0.7.1 <time datetime="2026-11-20">2026年11月20日</time></h3>
+          <p>最初の公開試験版。既存ウィジェットとの重複確認と、保存・再開時の原稿照合を追加しました。</p>
+        </li>
+      </ol>
+      <div class="links">
+        <a href="https://github.com/munn-nnuw/pinxai-widget-workshop/commits/main/start-prompt.txt">開始プロンプトの変更履歴</a>
+        <a href="https://github.com/munn-nnuw/widget-reference">参考資料・サンプル集</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
