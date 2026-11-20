@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Pinxaiのウィジェットを用途から探せるサンプル集。試し方とGitHubの原文を確認できます。">
+  <meta name="description" content="作りたいPinxaiウィジェットを機能から探せるサンプル集。相談チャット用の文と、登録用の原稿をコピーできます。">
   <meta name="theme-color" content="#f5f5fb">
   <title>参考資料・サンプル集｜Pinxai ウィジェット相談室</title>
   <style>
@@ -20,7 +20,7 @@
     * { box-sizing: border-box; }
     body { margin: 0; }
     main { width: min(100% - 2rem, 45rem); margin: 0 auto; padding: clamp(1.25rem, 5vw, 4rem) 0 3rem; }
-    h1, h2, p, dl, dd { margin: 0; }
+    h1, h2, h3, p, dl, dd, pre { margin: 0; }
     h1 { margin-top: .65rem; font-size: clamp(1.65rem, 5.7vw, 2.65rem); letter-spacing: -.045em; line-height: 1.35; }
     h2 { margin-bottom: .75rem; font-size: 1.25rem; }
     .hero {
@@ -31,10 +31,13 @@
       border-radius: 1.3rem;
     }
     .lead { margin-top: .75rem; }
-    .topics, .sample-links { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+    .topics { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
     .topics { margin-top: 1rem; }
     a { color: #332b90; text-underline-offset: .18em; }
-    a:focus-visible, summary:focus-visible { outline: 3px solid #6b51e0; outline-offset: 3px; }
+    a:focus-visible, summary:focus-visible, button:focus-visible, textarea:focus-visible {
+      outline: 3px solid #6b51e0;
+      outline-offset: 3px;
+    }
     section { margin-top: 1.7rem; }
     details { background: #fff; border: 1px solid var(--line); border-radius: .9rem; scroll-margin-top: 1rem; }
     details + details { margin-top: .55rem; }
@@ -46,6 +49,41 @@
     dl { padding-top: .65rem; border-top: 1px solid var(--line); }
     dt { font-weight: 700; }
     dd { margin: .1rem 0 .6rem; color: var(--muted); }
+    .consult { margin: .85rem 0 1rem; }
+    .copy-button {
+      min-height: 2.75rem;
+      padding: .45rem .8rem;
+      border: 1px solid var(--accent);
+      border-radius: .55rem;
+      background: #fff;
+      color: #332b90;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .copy-button:hover { background: #eeedff; }
+    .consult .copy-button { background: var(--accent); color: #fff; }
+    .consult .copy-button:hover { background: #332b90; }
+    .copy-help, .copy-message { margin-top: .45rem; color: var(--muted); font-size: .95rem; }
+    .copy-message:empty { margin: 0; }
+    .implementation { background: #f9f9fe; border-radius: .65rem; }
+    .implementation > summary { font-weight: 700; }
+    .implementation-body { padding: 0 .9rem .9rem; }
+    .sample-field + .sample-field { margin-top: 1rem; }
+    .sample-field h3 { margin-bottom: .35rem; font-size: 1rem; }
+    .sample-field pre, .copy-fallback {
+      width: 100%;
+      padding: .65rem;
+      background: #fff;
+      color: #20213b;
+      border: 1px solid var(--line);
+      border-radius: .5rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .sample-field code { font: .9rem/1.65 ui-monospace, monospace; }
+    .sample-field .copy-control, .copy-fallback { margin-top: .45rem; }
+    .copy-fallback { font: inherit; resize: vertical; }
     .references { padding-left: 1.4rem; margin: 0 0 .75rem; }
     .references li + li { margin-top: .6rem; }
   </style>
@@ -53,9 +91,9 @@
 <body>
   <main>
     <header class="hero">
-      <a href="./">ウィジェット相談室トップ</a>
-      <h1>参考資料・サンプル集</h1>
-      <p class="lead">作りたい機能を選ぶと、使いどころと試し方を確認できます。登録用のプロンプトやコードは、各サンプルのGitHub原文にあります。</p>
+      <a href="./">開始プロンプトのページへ</a>
+      <h1>作りたい機能から探す</h1>
+      <p class="lead">サンプルを選び、相談中のGeminiやChatGPTに貼る文をコピーできます。自分で組み込む場合は、設置手順と登録する原稿を開けます。</p>
       <nav class="topics" aria-label="サンプルの用途">
         <a href="#display">状況を表示する</a>
         <a href="#draft">下書きに入れる</a>
@@ -67,36 +105,267 @@
     <section id="display" aria-labelledby="display-title">
       <h2 id="display-title">状況を表示する</h2>
 
-      <details id="info-card">
+      <details class="sample" id="info-card">
         <summary><strong>日時・現在地カード</strong><span class="description">物語で確定した日時と場所を一枚のカードに表示する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>INFO風の表示で、いまの日時と居場所をひと目で確認したいとき。</dd>
             <dt>試し方</dt><dd>行き先を提案しただけの返答と、実際に到着した返答を比べます。到着前は元の場所が表示されます。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-info-card.txt">GitHub原文</a><a href="#info-card">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：日時・現在地カード
+何をするか：本文で確定した日時と現在地を一枚のカードに表示する。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後のAI返答末尾
+ウィジェット名／関数名：日時・現在地カード／SceneInfo
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：when と place は文字列。不明な項目は空文字。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外の各AI返答末尾に &lt;SceneInfo when="1日目・朝" place="街の広場" /&gt; の形のタグを一つ、コード枠外に出す。例の日時と場所は固定しない。when は本文で確定した作中の日時、place は主人公が実際にいる場所。時間経過と到着が確定したときだけ変更し、変化がない項目は直近の確定値を継ぐ。未確定の項目は空文字にする。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;SceneInfo when="1日目・朝" place="街の広場" /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function SceneInfo({ when, place }) {
+  const time = typeof when === 'string' ? when.trim() : '';
+  const location = typeof place === 'string' ? place.trim() : '';
+
+  return (
+    &lt;dl style={{ margin: 0, padding: 12, overflowWrap: 'anywhere' }}&gt;
+      &lt;dt&gt;日時&lt;/dt&gt;
+      &lt;dd&gt;{time || '不明'}&lt;/dd&gt;
+      &lt;dt&gt;現在地&lt;/dt&gt;
+      &lt;dd&gt;{location || '不明'}&lt;/dd&gt;
+    &lt;/dl&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：見本タグで表示を確認し、place を抜いたタグも試す。会話で行き先を提案しただけの返答と、実際に到着した返答を比べる。
+期待する結果：到着までは元の場所。place が欠けたときは場所だけ不明。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：既存のINFOがあれば、出どころと残したい内容を確認する。これは汎用のINFO停止設定ではない。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="location-card">
+      <details class="sample" id="location-card">
         <summary><strong>現在地カード</strong><span class="description">最後に確定した場所を表示する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>移動の多い作品で、いまいる場所だけを短く表示したいとき。</dd>
             <dt>試し方</dt><dd>広場から移動したいと伝えます。広場を出たことがまだ確定していない返答では、広場の表示が続きます。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-location-card.txt">GitHub原文</a><a href="#location-card">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：現在地カード
+何をするか：直近の本文で確定した現在地を表示する。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロの後、各AI返答の本文末尾
+ウィジェット名／関数名：現在地カード／LocationCard
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：place は現在地の文字列。未確定は空文字とし、欠落・空白・型違いも画面上は「不明」。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外のAI返答は、本文の末尾に次の形のタグを一つだけコード枠外に出す。
+&lt;LocationCard place="広場" /&gt;
+place は主人公が実際にいることが本文で確定した場所の名前。移動希望だけでは変更しない。直近までの本文を含めて現在地を確定できない場合は place=""。例の「広場」は見本とし、物語上の事実として使わない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;LocationCard place="広場" /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function LocationCard(props) {
+  const place = typeof props.place === 'string' ? props.place.trim() : '';
+
+  return (
+    &lt;section style={{ padding: 12, borderRadius: 8, background: '#f3f4f6', color: '#1f2937', overflowWrap: 'anywhere' }}&gt;
+      &lt;strong&gt;現在地&lt;/strong&gt;
+      &lt;div&gt;{place || '不明'}&lt;/div&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：設定画面でプレビュー用タグを入れる。place="" と place={4} でも試す。次に、プレビューチャットで現在地を広場と確定し、移動の希望を伝えただけで未到着の返答を確認する。
+期待する結果：設定プレビューは順に「広場」「不明」「不明」。プレビューチャットでは広場にいる間は表示が維持され、到着が確定してから切り替わる。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：他の常時有効ウィジェットがある作品では、起動方法を別途決める。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="character-status">
+      <details class="sample" id="character-status">
         <summary><strong>キャラクターの現在状態</strong><span class="description">複数のキャラクターの名前と状態を一覧にする。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>同行者ごとの休憩や待機の状態をまとめて確認したいとき。</dd>
             <dt>試し方</dt><dd>同行者の一人だけが休憩を終えた場面を試し、その人の状態だけが更新されることを確認します。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-character-status.txt">GitHub原文</a><a href="#character-status">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：キャラクターの現在状態
+何をするか：対象となる複数キャラクターの表示名と確定した現在状態を並べる。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後、人物の現在状態を表示するAI返答末尾
+ウィジェット名／関数名：キャラクターの現在状態／CharacterStatus
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：people は {id,name,state} の配列。人物の状態だけ不明なら state は空文字。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外、人物の現在状態を表示する場面では、返答末尾に &lt;CharacterStatus people={[{id:"a",name:"旅人",state:"休憩中"},{id:"b",name:"案内役",state:""}]} /&gt; の形のタグを一つコード枠外に出す。表示対象は現在の同行者。id は同じ人物の固定文字列、name は表示名、state は本文で確定した現在状態か空文字。前回の確定一覧を継ぎ、今回の本文で同行・離脱・状態変化が成立した人物だけ更新する。一時の不在と同行終了を分ける。確定空は people={[]}、一覧不明は属性を省略。例の人物を追加しない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;CharacterStatus people={[{id:"a",name:"旅人",state:"休憩中"},{id:"b",name:"案内役",state:""}]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function CharacterStatus({ people }) {
+  const valid = Array.isArray(people) &amp;&amp; people.every(person =&gt;
+    person &amp;&amp; typeof person.id === 'string' &amp;&amp; person.id.trim() &amp;&amp;
+    typeof person.name === 'string' &amp;&amp; person.name.trim() &amp;&amp; typeof person.state === 'string'
+  ) &amp;&amp; new Set(people.map(person =&gt; person.id)).size === people.length;
+
+  if (!valid) return &lt;p&gt;同行者の一覧は不明です。&lt;/p&gt;;
+  if (!people.length) return &lt;p&gt;同行者なし。&lt;/p&gt;;
+
+  return (
+    &lt;dl&gt;
+      {people.map(person =&gt; (
+        &lt;div key={person.id}&gt;
+          &lt;dt&gt;{person.name}&lt;/dt&gt;
+          &lt;dd&gt;{person.state.trim() || '状態不明'}&lt;/dd&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/dl&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：二人が同行している状態から片方だけ休憩を終える。もう片方は別室で待機させ、次に同行終了が明示された場面を試す。
+期待する結果：変化した一人だけ更新。一時不在で一覧から落ちず、同行終了が確定した人物だけ外れる。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：まず表示対象を決める。場面の同席者を見せたい場合は、同行者の一覧と混同しない。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
     </section>
@@ -104,47 +373,468 @@
     <section id="draft" aria-labelledby="draft-title">
       <h2 id="draft-title">下書きに入れる</h2>
 
-      <details id="draft-action">
+      <details class="sample" id="draft-action">
         <summary><strong>行動の下書きボタン</strong><span class="description">決まった行動文をボタンでチャットの入力欄に追記する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>探索中によく使う「周囲を調べる」などの定型文をすぐ入力したいとき。</dd>
             <dt>試し方</dt><dd>プレビューチャットでボタンを押します。文が入力欄に入り、プレイヤーが送信するまで物語は進みません。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-draft-action.txt">GitHub原文</a><a href="#draft-action">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：行動の下書きボタン
+何をするか：「周囲を調べる」を押すとチャット入力欄へ追記する。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロの後、探索場面で周囲を調べられるAI返答の末尾
+ウィジェット名／関数名：行動の下書きボタン／DraftAction
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：なし。行動を一つに固定した最小例。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロの後、探索中にプレイヤーが周囲を調べられる場面で、本文末尾に &lt;DraftAction /&gt; を一つだけコード枠外に出す。タグの出力やボタンの表示だけで行動は成立しない。実際に送信された最新の入力を受け、状況に合わせて行動を描く。過去入力や引用の行動文を再処理しない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;DraftAction /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function DraftAction() {
+  const [status, setStatus] = useState('ready');
+
+  async function addDraft() {
+    setStatus('pending');
+    try {
+      const result = await pinx.chat.insertText('周囲を調べる');
+      setStatus(result?.ok ? 'done' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  return (
+    &lt;section style={{ padding: 12 }}&gt;
+      &lt;button type="button" onClick={addDraft} disabled={status === 'pending' || status === 'done'}&gt;
+        周囲を調べる
+      &lt;/button&gt;
+      &lt;div role="status"&gt;
+        {status === 'done' &amp;&amp; '下書きに入りました。確認して送信してください。'}
+        {status === 'error' &amp;&amp; '入力欄のあるプレビューチャットで試してください。'}
+      &lt;/div&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：探索場面のプレビューチャットでボタンを押し、入力欄を見る。下書きを確認して送信する。設定画面のライブプレビューでも押す。
+期待する結果：プレビューチャットでは下書きへ一度追記し、送信まで物語が進まない。設定プレビューなど入力欄のない場所では成功表示を出さない。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：同一表示では追記成功後にボタンを無効にする仕様。別の返答や再表示で表示状態を継ぐ用途には使わない。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="draft-choices">
+      <details class="sample" id="draft-choices">
         <summary><strong>行動候補から下書き</strong><span class="description">その場面でAIが提案した行動から選んで入力する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>返答ごとに選べる行動が変わり、プレイヤーが送る前に文を編集できるようにしたいとき。</dd>
             <dt>試し方</dt><dd>候補の一つを押し、入力された文を編集して送ります。物語は編集後に送信した文に沿って進みます。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-draft-choices.txt">GitHub原文</a><a href="#draft-choices">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：行動候補から下書き
+何をするか：AIが出した行動候補のうち一つをボタンで下書きに入れる。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後、提案できる行動がある返答の末尾
+ウィジェット名／関数名：行動候補から下書き／DraftChoices
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：choices は異なる行動文の配列。最大3件。欠落や空配列では候補を表示しない。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外、次に選べる具体的な行動があるときだけ、本文の末尾に &lt;DraftChoices choices={["周囲を調べる", "店主に尋ねる"]} /&gt; の形のタグを一つコード枠外に出す。choices は状況に合う短い行動文1〜3件。重複させない。例文を毎回使わない。候補表示・下書きを行動の成立として扱わない。利用者が実際に送信した最新の文を読み、その場の状況で結果を描く。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;DraftChoices choices={["周囲を調べる", "店主に尋ねる"]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function DraftChoices({ choices }) {
+  const usable = Array.isArray(choices)
+    ? choices.filter(value =&gt; typeof value === 'string').map(value =&gt; value.trim()).filter(Boolean)
+    : [];
+  const options = [...new Set(usable)].slice(0, 3);
+  const [state, setState] = useState('ready');
+  const busy = useRef(false);
+
+  async function choose(text) {
+    if (busy.current) return;
+    busy.current = true;
+    setState('pending');
+    try {
+      const result = await pinx.chat.insertText(text);
+      if (result?.ok) {
+        setState('done');
+        return;
+      }
+    } catch {
+      // 入力欄が使えない場合も下の表示を使う。
+    }
+    busy.current = false;
+    setState('error');
+  }
+
+  if (!options.length) return &lt;p&gt;現在の行動候補はありません。&lt;/p&gt;;
+
+  return (
+    &lt;section aria-label="行動候補"&gt;
+      &lt;ul&gt;
+        {options.map(option =&gt; (
+          &lt;li key={option}&gt;
+            &lt;button type="button" onClick={() =&gt; choose(option)} disabled={state === 'pending' || state === 'done'}&gt;
+              {option}
+            &lt;/button&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+      &lt;p role="status"&gt;
+        {state === 'done' &amp;&amp; '下書きに入りました。確認して送信してください。'}
+        {state === 'error' &amp;&amp; '入力欄を確認して、もう一度試してください。'}
+      &lt;/p&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：2候補のうち片方を押す。送信前に下書きを編集する。入力欄が使えない画面で押した後、使用可能な場面でも試す。
+期待する結果：選んだ文が一度だけ入る。押した時点で物語が進まず、送った文が扱われる。挿入失敗に成功表示は出ない。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：固定文を挿入する入門例は sample-draft-action.txt。ここでは候補を返答ごとに受け取る。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="draft-builder">
+      <details class="sample" id="draft-builder">
         <summary><strong>選択から下書き文を作る</strong><span class="description">行き先と目的を選び、一文にまとめて入力する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>訪問先と用件など、二つの選択を組み合わせて指示したいとき。</dd>
             <dt>試し方</dt><dd>行き先だけを選び、次に目的も選びます。両方が揃ってから挿入でき、表示された文が下書きに入ります。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-draft-builder.txt">GitHub原文</a><a href="#draft-builder">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：選択から下書き文を作る
+何をするか：二つの選択を一文にまとめ、利用者の操作で下書きに入れる。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後、訪問先の候補が実際に判明している場面の返答末尾
+ウィジェット名／関数名：選択から下書き文を作る／DraftBuilder
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：places は既知の候補名の配列。目的はコードの選択肢から選ぶ。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外、主人公が選べる具体的な訪問先が判明した場面で、返答末尾に &lt;DraftBuilder places={["広場", "工房"]} /&gt; の形のタグを一つコード枠外に出す。places に入れるのは主人公が知っている候補だけ。例を事実にしない。行き先や目的を選ぶだけでは移動を成立させない。送信された最新の移動希望を受け、道のりや立ち入り条件を踏まえて描く。実際に到着したときだけ現在地を更新する。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;DraftBuilder places={["広場", "工房"]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function DraftBuilder({ places }) {
+  const values = Array.isArray(places)
+    ? places.filter(value =&gt; typeof value === 'string').map(value =&gt; value.trim()).filter(Boolean)
+    : [];
+  const options = [...new Set(values)];
+  const purposes = ['話を聞く', '周囲を調べる'];
+  const [place, setPlace] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [state, setState] = useState('ready');
+  const busy = useRef(false);
+  const selectedPlace = options.includes(place) ? place : '';
+  const draft = selectedPlace &amp;&amp; purpose ? selectedPlace + 'へ向かい、' + purpose + '。' : '';
+
+  async function insertDraft() {
+    if (!draft || busy.current) return;
+    busy.current = true;
+    setState('pending');
+    try {
+      const result = await pinx.chat.insertText(draft);
+      if (result?.ok) {
+        setState('done');
+        return;
+      }
+    } catch {
+      // 入力欄が使えない場合も下の表示を使う。
+    }
+    busy.current = false;
+    setState('error');
+  }
+
+  if (!options.length) return &lt;p&gt;訪問先の候補がありません。&lt;/p&gt;;
+
+  return (
+    &lt;section&gt;
+      &lt;p&gt;
+        &lt;label&gt;行き先 &lt;select value={selectedPlace} onChange={event =&gt; setPlace(event.target.value)}&gt;
+          &lt;option value=""&gt;選ぶ&lt;/option&gt;
+          {options.map(name =&gt; &lt;option key={name} value={name}&gt;{name}&lt;/option&gt;)}
+        &lt;/select&gt;&lt;/label&gt;
+      &lt;/p&gt;
+      &lt;p&gt;
+        &lt;label&gt;目的 &lt;select value={purpose} onChange={event =&gt; setPurpose(event.target.value)}&gt;
+          &lt;option value=""&gt;選ぶ&lt;/option&gt;
+          {purposes.map(name =&gt; &lt;option key={name} value={name}&gt;{name}&lt;/option&gt;)}
+        &lt;/select&gt;&lt;/label&gt;
+      &lt;/p&gt;
+      {draft &amp;&amp; &lt;p&gt;{draft}&lt;/p&gt;}
+      &lt;button type="button" onClick={insertDraft} disabled={!draft || state === 'pending' || state === 'done'}&gt;
+        入力欄へ入れる
+      &lt;/button&gt;
+      &lt;p role="status"&gt;
+        {state === 'done' &amp;&amp; '下書きに入りました。確認して送信してください。'}
+        {state === 'error' &amp;&amp; '入力欄を確認して、もう一度試してください。'}
+      &lt;/p&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：行き先だけ選び、次に目的も選ぶ。表示された文を確認して挿入し、まだ送信しない。
+期待する結果：片方だけでは挿入ボタンが無効。両方を選ぶと表示される文が下書きに入る。選択・挿入だけでは移動しない。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：選択欄はこの画面の一時的な値。新しいタグから選んでいた候補が消えたら操作に使わない。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="mode-command">
+      <details class="sample" id="mode-command">
         <summary><strong>モードとコマンドの下書き</strong><span class="description">探索や休息などへの変更希望を入力欄に入れる。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>設定タブの操作と、物語の中で成立したモードの表示を分けたいとき。</dd>
             <dt>試し方</dt><dd>探索中に「休息」を押して送信します。下書きの段階では探索のままで、物語で休息が成立した返答から表示が切り替わります。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-mode-command.txt">GitHub原文</a><a href="#mode-command">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：モードとコマンドの下書き
+何をするか：表示用タブと物語で確定したモードを分け、変更希望を入力欄へ入れる。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後のAI返答末尾
+ウィジェット名／関数名：モードとコマンドの下書き／ModeCommand
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：mode は現在確定している explore または rest。不明は属性なし。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外の各AI返答末尾に &lt;ModeCommand mode="explore" /&gt; の形のタグを一つコード枠外に出す。mode は確定した explore（探索）か rest（休息）。この見本の新規開始時は explore。以後は直近の確定値を継ぎ、不明なら属性を省く。最新の送信済み入力に独立行「!方針 探索」か「!方針 休息」が一つだけある場合に、状況に応じて希望を扱う。実際に方針変更が成立した返答から mode を変える。タブ操作、下書き、引用、過去入力、複数指示では変更しない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;ModeCommand mode="explore" /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function ModeCommand({ mode }) {
+  const labels = { explore: '探索', rest: '休息' };
+  const actual = mode === 'explore' || mode === 'rest' ? labels[mode] : '不明';
+  const [tab, setTab] = useState('status');
+  const [result, setResult] = useState('ready');
+  const busy = useRef(false);
+
+  async function requestMode(next) {
+    if (busy.current || mode === next) return;
+    busy.current = true;
+    setResult('pending');
+    try {
+      const reply = await pinx.chat.insertText('\n!方針 ' + labels[next]);
+      if (reply?.ok) {
+        setResult('done');
+        return;
+      }
+    } catch {
+      // 入力欄が使えない場合も下の表示を使う。
+    }
+    busy.current = false;
+    setResult('error');
+  }
+
+  return (
+    &lt;section&gt;
+      &lt;button type="button" aria-pressed={tab === 'status'} onClick={() =&gt; setTab('status')}&gt;状態&lt;/button&gt;
+      &lt;button type="button" aria-pressed={tab === 'settings'} onClick={() =&gt; setTab('settings')}&gt;方針を選ぶ&lt;/button&gt;
+      &lt;p&gt;確定している方針 {actual}&lt;/p&gt;
+      {tab === 'settings' &amp;&amp; (
+        &lt;div&gt;
+          {Object.keys(labels).map(key =&gt; (
+            &lt;button type="button" key={key} onClick={() =&gt; requestMode(key)}
+              disabled={mode === key || result === 'pending' || result === 'done'}&gt;
+              {labels[key]}の希望を入力欄へ
+            &lt;/button&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+      &lt;p role="status"&gt;
+        {result === 'done' &amp;&amp; '下書きに入りました。確認して送信してください。'}
+        {result === 'error' &amp;&amp; '入力欄を確認して、もう一度試してください。'}
+      &lt;/p&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：探索中に設定タブを開き、休息を押す。送信前、送信後に休息が成立した時、移動中ですぐ休めない時を確認する。
+期待する結果：タブ操作と下書きでは探索のまま。休息が実際に成立した返答だけ休息表示になる。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：タブは表示だけの一時状態。コマンドを送信するかは利用者が決める。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
     </section>
@@ -152,58 +842,473 @@
     <section id="carry" aria-labelledby="carry-title">
       <h2 id="carry-title">次の返答に引き継ぐ</h2>
 
-      <details id="inventory-list">
+      <details class="sample" id="inventory-list">
         <summary><strong>所持品一覧</strong><span class="description">手に入れた品と個数を、物語で確定した変化に合わせて更新する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>冒険中に拾った物や消耗品の残りを確認したいとき。</dd>
             <dt>試し方</dt><dd>品を一つ受け取り、その品について話した後で使い切ります。表示は「1個」「1個」「なし」の順に変わります。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-inventory-list.txt">GitHub原文</a><a href="#inventory-list">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：所持品一覧
+何をするか：受け取った品や個数を、確定した変化だけ反映して表示する。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後のAI返答末尾
+ウィジェット名／関数名：所持品一覧／InventoryList
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：items は id、name、count を持つ品の配列。確定した空は []、不明は属性なし。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外の各AI返答末尾に &lt;InventoryList items={[{id:"rope",name:"ロープ",count:1}]} /&gt; の形のタグを一つコード枠外に出す。items は現に所持している全件。id は品を区別する固定の文字列、name は品名、count は1以上の整数。例を事実にしない。この見本の新規開始時は空、途中では直近の確定一覧を継ぐ。受け取り・使用・手放しが本文で成立した品の数だけ変え、0になった品は外す。候補・過去の言及は変更理由にしない。確定した空は items={[]}。引き継げず不明なら items 属性を省略する。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;InventoryList items={[{id:"rope",name:"ロープ",count:1}]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function InventoryList({ items }) {
+  const valid = Array.isArray(items) &amp;&amp; items.every(item =&gt;
+    item &amp;&amp; typeof item.id === 'string' &amp;&amp; item.id.trim() &amp;&amp;
+    typeof item.name === 'string' &amp;&amp; item.name.trim() &amp;&amp;
+    Number.isSafeInteger(item.count) &amp;&amp; item.count &gt; 0
+  ) &amp;&amp; new Set(items.map(item =&gt; item.id)).size === items.length;
+
+  if (!valid) return &lt;p&gt;所持品は不明です。&lt;/p&gt;;
+  if (!items.length) return &lt;p&gt;所持品なし。&lt;/p&gt;;
+
+  return (
+    &lt;section aria-label="所持品"&gt;
+      &lt;ul&gt;{items.map(item =&gt; &lt;li key={item.id}&gt;{item.name} × {item.count}&lt;/li&gt;)}&lt;/ul&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：新規開始の空一覧から品を一つ受け取る。その品に言及するだけの返答と、実際に使い切った返答を順に確認する。別途属性なしも試す。
+期待する結果：なし → 1個 → 1個 → なし。属性がなければ不明。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：同名でも別個に管理したい品は別IDにする。携行・保管を区別するなら、確定済みの所在を別の値として追加する。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="keepsake-count">
+      <details class="sample" id="keepsake-count">
         <summary><strong>記念品カウンター</strong><span class="description">拾った記念品の累計を表示する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>収集イベントなどで、特定の品の合計だけを追いたいとき。</dd>
             <dt>試し方</dt><dd>一つ拾ってから、その入手を思い出すだけの返答を試します。合計は一つのままです。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-keepsake-count.txt">GitHub原文</a><a href="#keepsake-count">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：記念品カウンター
+何をするか：拾った記念品の合計を表示し、次の返答へ引き継ぐ。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロの後、各AI返答の末尾
+ウィジェット名／関数名：記念品カウンター／KeepsakeCount
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：count は確定した合計を示す0以上の整数。合計不明は count 属性を省略する。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外の各AI返答末尾に &lt;KeepsakeCount count={0} /&gt; の形のタグを一つだけコード枠外に出す。数値例は固定しない。新規チャットの開始時だけ0個を基準とする。以後は直近の確定した合計を継ぎ、今回の本文で新たな入手が成立した分だけ足す。申し出や予定、過去の入手の言及・引用で加算しない。直近タグが欠けても、確認できる過去の合計と以降の確定入手から復元する。合計が決められなければ &lt;KeepsakeCount /&gt; を出し、推測で0に戻さない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;KeepsakeCount count={0} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function KeepsakeCount(props) {
+  const count = props.count;
+  const valid = Number.isSafeInteger(count) &amp;&amp; count &gt;= 0;
+
+  return (
+    &lt;section style={{ padding: 12 }}&gt;
+      &lt;strong&gt;記念品&lt;/strong&gt;
+      &lt;div&gt;{valid ? count + '個' : '不明'}&lt;/div&gt;
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：新規チャットで入手前→一つ入手→その入手を思い出すだけ、の順に進める。設定画面で count を省いたタグや負数のタグも試す。
+期待する結果：0個→1個→1個。属性欠落や負数は「不明」。通常の会話だけで値は変わらない。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：返答間の引き継ぎ例。別チャットへの自動保存はない。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="wallet-ledger">
+      <details class="sample" id="wallet-ledger">
         <summary><strong>簡単な所持金計算</strong><span class="description">確定した収入・支出から一種類の通貨の残高を表示する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>買い物や報酬のあとに所持金を見せたいとき。同じ返答内での取引の重複も試せます。</dd>
             <dt>試し方</dt><dd>残高10から3を支払い、同じ返答内に同じ取引を重ねます。残高は7で、次の返答に収支がなければ7を引き継ぎます。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-wallet-ledger.txt">GitHub原文</a><a href="#wallet-ledger">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：簡単な所持金計算
+何をするか：確定した収支を同じ取引IDで一度だけ計上し、単一通貨の残高を表示する。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後のAI返答末尾
+ウィジェット名／関数名：簡単な所持金計算／WalletLedger
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：before は今回の取引前残高、entries は今回確定の {id,delta} 配列。空は収支なし。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外の各AI返答末尾に &lt;WalletLedger before={10} entries={[{id:"trade-1",delta:-3}]} /&gt; の形のタグを一つコード枠外に出す。例は事実化しない。before は今回の取引前残高。新規開始時の初期値は0、以後は直近の確定結果を継ぐ。entries は今回の本文で受け渡しが成立した取引だけ。受取は正、支払いは負の整数。同じ取引には同じidを使い、済んだ取引は次のタグへ再送しない。提示、未払い、予定、引用の金額は含めない。収支なしは entries={[]}。残高や取引が確定できないときは当該属性を省き、0を推測しない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;WalletLedger before={10} entries={[{id:"trade-1",delta:-3}]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function WalletLedger({ before, entries }) {
+  if (!Number.isSafeInteger(before) || before &lt; 0 || !Array.isArray(entries)) {
+    return &lt;p&gt;所持金は不明です。&lt;/p&gt;;
+  }
+
+  const transactions = new Map();
+  for (const entry of entries) {
+    if (!entry || typeof entry.id !== 'string' || !entry.id.trim() ||
+        !Number.isSafeInteger(entry.delta) || !entry.delta) {
+      return &lt;p&gt;所持金は不明です。&lt;/p&gt;;
+    }
+    if (transactions.has(entry.id) &amp;&amp; transactions.get(entry.id) !== entry.delta) {
+      return &lt;p&gt;同じ取引の金額が一致しません。&lt;/p&gt;;
+    }
+    transactions.set(entry.id, entry.delta);
+  }
+
+  let balance = before;
+  for (const delta of transactions.values()) {
+    balance += delta;
+    if (!Number.isSafeInteger(balance)) {
+      return &lt;p&gt;今回の取引後の所持金を確定できません。&lt;/p&gt;;
+    }
+  }
+  if (balance &lt; 0) {
+    return &lt;p&gt;今回の取引後の所持金を確定できません。&lt;/p&gt;;
+  }
+
+  return &lt;p&gt;所持金 {balance} 枚&lt;/p&gt;;
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：before=10 から3の支払い。続けて、同じ取引IDの重複、次の返答の収支なし、残高欠落を試す。
+期待する結果：重複しても残高7。次の返答は before=7・空配列で7。値が欠けたときは不明。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：コードが一度だけにまとめるのは同じタグ内の重複。返答をまたいだ再送を避ける規則はAI用プロンプトで管理する。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="task-list">
+      <details class="sample" id="task-list">
         <summary><strong>約束と依頼の一覧</strong><span class="description">引き受けた未完の約束・依頼と、次の行動を表示する。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>受けた依頼や交わした約束を、会話が進んでも手帳のように見返したいとき。</dd>
             <dt>試し方</dt><dd>依頼の提示、引き受け、完了を順に試します。引き受けた時点で載り、会話に出なくても完了するまで残ります。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-task-list.txt">GitHub原文</a><a href="#task-list">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：約束と依頼の一覧
+何をするか：引き受けた約束・依頼と次にやることを表示する。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後のAI返答末尾
+ウィジェット名／関数名：約束と依頼の一覧／TaskList
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：tasks は id、kind、title、next を持つ未完の項目の配列。kind は quest または promise。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外の各AI返答末尾に &lt;TaskList tasks={[{id:"repair",kind:"quest",title:"時計の修理",next:"部品を探す"}]} /&gt; の形のタグを一つコード枠外に出す。tasks は実際に引き受けた未完の全件。id は同じ用件の固定文字列、kind は quest（依頼）か promise（約束）、title は件名、next は確定している次の行動か空文字。新規開始は空、途中は直近一覧を継ぐ。提案・言及は未登録。成立した変更だけ更新し、完了・取消が確定した項目だけ外す。確定した空は tasks={[]}、一覧が不明なら属性を省略。例を事実化しない。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;TaskList tasks={[{id:"repair",kind:"quest",title:"時計の修理",next:"部品を探す"}]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function TaskList({ tasks }) {
+  const valid = Array.isArray(tasks) &amp;&amp; tasks.every(task =&gt;
+    task &amp;&amp; typeof task.id === 'string' &amp;&amp; task.id.trim() &amp;&amp;
+    (task.kind === 'quest' || task.kind === 'promise') &amp;&amp;
+    typeof task.title === 'string' &amp;&amp; task.title.trim() &amp;&amp; typeof task.next === 'string'
+  ) &amp;&amp; new Set(tasks.map(task =&gt; task.id)).size === tasks.length;
+
+  if (!valid) return &lt;p&gt;用件は不明です。&lt;/p&gt;;
+  if (!tasks.length) return &lt;p&gt;引き受けている用件はありません。&lt;/p&gt;;
+
+  return (
+    &lt;ul&gt;
+      {tasks.map(task =&gt; (
+        &lt;li key={task.id}&gt;
+          {task.kind === 'quest' ? '依頼' : '約束'} · {task.title}
+          {task.next.trim() &amp;&amp; &lt;div&gt;次にやること {task.next}&lt;/div&gt;}
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：依頼が提示される場面、引き受けた場面、未完なのに会話から一度消えた場面、完了した場面を順に確認する。
+期待する結果：提示だけでは追加されず、引き受け後の未完項目は継続し、完了後に外れる。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：期限、前金、貸借はこの見本の対象外。追加する場合は状態と完了条件を先に決める。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
 
-      <details id="facility-list">
+      <details class="sample" id="facility-list">
         <summary><strong>場所ごとの施設一覧</strong><span class="description">ダンジョンなどの施設を、階層や場所ごとにまとめる。</span></summary>
         <div class="sample-body">
           <dl>
             <dt>使いどころ</dt><dd>拠点の設備や施設の場所を覚え、増設や移設を一覧へ反映したいとき。</dd>
             <dt>試し方</dt><dd>工房の移設を提案した場面と、移設が完了した場面を比べます。完了した返答から工房が新しい場所へ移ります。</dd>
           </dl>
-          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-facility-list.txt">GitHub原文</a><a href="#facility-list">このサンプルへのリンク</a></div>
+          <div class="consult copy-control" hidden>
+            <button class="copy-button" type="button" data-copy="consultation">相談チャットに貼る文をコピー</button>
+            <p class="copy-help">コピーした文を、ウィジェット相談室を始めたGeminiやChatGPTのチャットに、そのまま貼って送ってください。</p>
+            <p class="copy-message" role="status"></p>
+          </div>
+          <template class="sample-source-notes">PinxAI ウィジェットサンプル投稿書式 v0.1
+
+【概要】
+サンプル名：場所ごとの施設一覧
+何をするか：確定した施設を、階層や施設のある場所ごとにまとめる。
+提供者の表示名：ウィジェット相談室
+元の作品・投稿・配布ページ（公開URL、任意）：なし
+対象の版（版番号・日付・固定リンクのいずれか）：0.1
+
+【掲載・利用の希望】
+索引への掲載（可／不可）：可
+資料の転載・ミラー（可／不可／条件付き）：リンクによる紹介可
+コードや本文の改変・再配布（可／不可／条件付き）：自分のPinxAI作品に合わせた改変・設置可。サンプル原稿の再配布は個別確認。
+AIが回答時にサンプルを参照する利用（可／不可／条件付き）：可
+適用するライセンス、条件、必要な表記があれば記載：上記の通り。モデルの訓練用途は対象外。</template>
+          <details class="implementation">
+            <summary>自分で組み込む</summary>
+            <div class="implementation-body">
+              <div class="sample-field" data-section="設置">
+                <h3>設置手順</h3>
+                <pre>表示する場面と位置：固定イントロ後、施設管理中のAI返答末尾
+ウィジェット名／関数名：場所ごとの施設一覧／FacilityList
+常時有効の設定／トリガーキーワード：空いている作品でオン／設定なし
+ウィジェット以外の変更・依存する既存設定（なければ「なし」）：なし
+タグで受け取る値（意味・型。初期値と欠落時の扱いも必要に応じて）：facilities は {id,name,place} の配列。place が空なら施設の存在だけが確定している。</pre>
+              </div>
+              <div class="sample-field" data-section="AI用プロンプト">
+                <h3>AI用プロンプト</h3>
+                <pre><code>固定イントロ以外、施設管理中のAI返答末尾に &lt;FacilityList facilities={[{id:"forge",name:"工房",place:"地下1階"},{id:"store",name:"倉庫",place:""}]} /&gt; の形のタグを一つコード枠外に出す。facilities は現存が確定した全施設。id は同じ施設の固定文字列、name は名称、place は階層や地上の場所。所在だけ不明なら空文字。前回の確定一覧を継ぎ、設置・移設・撤去が本文で成立した行だけ更新する。改名・移設は同じid。例を事実化せず、予定だけで変更しない。確定した空は facilities={[]}、一覧不明は属性を省略。</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">AI用プロンプトをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="プレビュー用タグ">
+                <h3>プレビュー用タグ</h3>
+                <pre><code>&lt;FacilityList facilities={[{id:"forge",name:"工房",place:"地下1階"},{id:"store",name:"倉庫",place:""}]} /&gt;</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">プレビュー用タグをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="コード">
+                <h3>コード</h3>
+                <pre><code>function FacilityList({ facilities }) {
+  const valid = Array.isArray(facilities) &amp;&amp; facilities.every(facility =&gt;
+    facility &amp;&amp; typeof facility.id === 'string' &amp;&amp; facility.id.trim() &amp;&amp;
+    typeof facility.name === 'string' &amp;&amp; facility.name.trim() &amp;&amp; typeof facility.place === 'string'
+  ) &amp;&amp; new Set(facilities.map(facility =&gt; facility.id)).size === facilities.length;
+
+  if (!valid) return &lt;p&gt;施設一覧は不明です。&lt;/p&gt;;
+  if (!facilities.length) return &lt;p&gt;施設はありません。&lt;/p&gt;;
+
+  const byPlace = new Map();
+  for (const facility of facilities) {
+    const place = facility.place.trim() || '所在未確認';
+    if (!byPlace.has(place)) byPlace.set(place, []);
+    byPlace.get(place).push(facility);
+  }
+
+  return (
+    &lt;section aria-label="施設一覧"&gt;
+      {[...byPlace].map(([place, rooms]) =&gt; (
+        &lt;div key={place}&gt;
+          &lt;strong&gt;{place}&lt;/strong&gt;
+          &lt;ul&gt;{rooms.map(room =&gt; &lt;li key={room.id}&gt;{room.name}&lt;/li&gt;)}&lt;/ul&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/section&gt;
+  );
+}</code></pre>
+                <div class="copy-control" hidden>
+                  <button class="copy-button" type="button" data-copy="field">コードをコピー</button>
+                  <p class="copy-message" role="status"></p>
+                </div>
+              </div>
+              <div class="sample-field" data-section="再現・確認">
+                <h3>試し方</h3>
+                <pre>試す入力と操作：所在不明の倉庫を表示し、本文で所在を確定する。次に工房の移設案と、実際の移設後を比べる。
+期待する結果：不明だった倉庫が場所の見出しへ移る。同じ工房は移設成立後だけ所属が変わり、二重に並ばない。
+実際に確認した場所・日付・結果（未確認ならその旨）：PinxAI実機は未確認。
+任意の補足（失敗例、対処、既知の制限、画像など）：行き先を選んだ操作や施設の設置予約では、一覧を変更しない。</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </details>
     </section>
@@ -228,6 +1333,51 @@
 
     window.addEventListener("hashchange", openLinkedSample);
     openLinkedSample();
+
+    const fallback = document.createElement("textarea");
+    fallback.className = "copy-fallback";
+    fallback.readOnly = true;
+    fallback.rows = 6;
+    fallback.setAttribute("aria-label", "手動でコピーするテキスト");
+
+    function consultationText(sample) {
+      const name = sample.querySelector("summary strong").textContent;
+      const request = `以下のサンプル「${name}」を参考に、私の作品にこの機能を組み込みたいです。すでに話した作品設定と既存の表示・機能を踏まえ、何を表示し、いつ更新するかをまず一緒に決めてください。仕様が決まったら、Pinxaiの各欄に貼る原稿と試し方を出してください。`;
+      const originalNotes = sample.querySelector(".sample-source-notes").content.textContent;
+      const fields = Array.from(sample.querySelectorAll("[data-section]"), field =>
+        `【${field.dataset.section}】\n${field.querySelector("pre").textContent}`
+      );
+      return [request, "--- サンプル本文 ---", originalNotes, ...fields].join("\n\n") + "\n";
+    }
+
+    for (const control of document.querySelectorAll(".copy-control")) {
+      control.hidden = false;
+    }
+
+    document.querySelector("main").addEventListener("click", async event => {
+      const button = event.target.closest("button[data-copy]");
+      if (!button) return;
+
+      const control = button.closest(".copy-control");
+      const message = control.querySelector(".copy-message");
+      const isConsultation = button.dataset.copy === "consultation";
+      const value = isConsultation
+        ? consultationText(button.closest("details.sample"))
+        : button.closest(".sample-field").querySelector("pre").textContent;
+
+      fallback.remove();
+      message.textContent = "";
+      try {
+        await navigator.clipboard.writeText(value);
+        message.textContent = isConsultation ? "相談チャットに貼る文をコピーしました。" : "コピーしました。";
+      } catch {
+        fallback.value = value;
+        control.after(fallback);
+        fallback.focus();
+        fallback.select();
+        message.textContent = "下の欄を選択して、手動でコピーしてください。";
+      }
+    });
   </script>
 </body>
 </html>
