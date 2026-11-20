@@ -78,15 +78,9 @@
     .faq details + details { border-top: 1px solid var(--line); }
     .faq summary { padding: .75rem 1rem; font-weight: 700; }
     .faq details > p { padding: 0 1rem .85rem; color: var(--muted); }
-    .sample-intro {
-      padding: 1rem;
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: .9rem;
-    }
-    .sample-examples { margin: 0 0 .75rem; padding-left: 1.4rem; }
-    .sample-examples li + li { margin-top: .25rem; }
-    .sample-index-link { font-weight: 700; }
+    .sample-entry { margin-top: 1rem; padding-top: .85rem; border-top: 1px solid var(--line); }
+    .sample-entry a { font-weight: 700; }
+    .sample-entry p { margin-top: .25rem; color: var(--muted); }
     .changes { margin: 0; padding: 0; list-style: none; }
     .changes li { border-top: 1px solid var(--line); padding: .75rem 0; }
     .changes h3 { display: flex; flex-wrap: wrap; gap: 0 .65rem; }
@@ -152,6 +146,10 @@
         <textarea id="prompt-text" readonly aria-label="開始プロンプトの全文" spellcheck="false"></textarea>
       </details>
       <noscript><p class="copy-fallback">コピーするにはテキスト版を開いてください。</p></noscript>
+      <div class="sample-entry">
+        <a href="./samples.html">作りたい機能から探す</a>
+        <p>サンプル集で機能を選び、相談中のチャットに貼る文をコピーできます。</p>
+      </div>
     </header>
 
     <section class="section" aria-labelledby="faq-title">
@@ -177,18 +175,6 @@
           <summary>途中で別のチャットに移れますか？</summary>
           <p>「保存用を出して」と伝えると、決めた仕様と原稿がまとまります。新しいチャットに、開始プロンプトと保存用一式を貼って続けられます。</p>
         </details>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="samples-title">
-      <h2 id="samples-title">参考資料・サンプル集</h2>
-      <div class="sample-intro">
-        <ul class="sample-examples">
-          <li><a href="./samples.html#info-card">日時・現在地カード</a></li>
-          <li><a href="./samples.html#draft-action">行動を下書きに入れる</a></li>
-          <li><a href="./samples.html#inventory-list">所持品を引き継ぐ</a></li>
-        </ul>
-        <a class="sample-index-link" href="./samples.html">サンプル集を見る</a>
       </div>
     </section>
 
