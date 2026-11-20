@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Pinxaiのウィジェットを用途から探せるサンプル集。試し方とGitHubの原文を確認できます。">
+  <meta name="theme-color" content="#f5f5fb">
+  <title>参考資料・サンプル集｜Pinxai ウィジェット相談室</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+      color: #20213b;
+      background: #f5f5fb;
+      line-height: 1.7;
+      --muted: #545571;
+      --line: #dedff0;
+      --accent: #423baf;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(100% - 2rem, 45rem); margin: 0 auto; padding: clamp(1.25rem, 5vw, 4rem) 0 3rem; }
+    h1, h2, p, dl, dd { margin: 0; }
+    h1 { margin-top: .65rem; font-size: clamp(1.65rem, 5.7vw, 2.65rem); letter-spacing: -.045em; line-height: 1.35; }
+    h2 { margin-bottom: .75rem; font-size: 1.25rem; }
+    .hero {
+      padding: clamp(1.1rem, 5vw, 2.5rem);
+      background: linear-gradient(130deg, #fff 50%, #eeedff);
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--accent);
+      border-radius: 1.3rem;
+    }
+    .lead { margin-top: .75rem; }
+    .topics, .sample-links { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+    .topics { margin-top: 1rem; }
+    a { color: #332b90; text-underline-offset: .18em; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #6b51e0; outline-offset: 3px; }
+    section { margin-top: 1.7rem; }
+    details { background: #fff; border: 1px solid var(--line); border-radius: .9rem; scroll-margin-top: 1rem; }
+    details + details { margin-top: .55rem; }
+    details:target { border-color: var(--accent); }
+    summary { padding: .8rem 1rem; cursor: pointer; }
+    summary strong { font-size: 1.05rem; }
+    .description { display: block; margin-left: 1.25rem; color: var(--muted); }
+    .sample-body { padding: 0 1rem 1rem; }
+    dl { padding-top: .65rem; border-top: 1px solid var(--line); }
+    dt { font-weight: 700; }
+    dd { margin: .1rem 0 .6rem; color: var(--muted); }
+    .references { padding-left: 1.4rem; margin: 0 0 .75rem; }
+    .references li + li { margin-top: .6rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <a href="./">ウィジェット相談室トップ</a>
+      <h1>参考資料・サンプル集</h1>
+      <p class="lead">作りたい機能を選ぶと、使いどころと試し方を確認できます。登録用のプロンプトやコードは、各サンプルのGitHub原文にあります。</p>
+      <nav class="topics" aria-label="サンプルの用途">
+        <a href="#display">状況を表示する</a>
+        <a href="#draft">下書きに入れる</a>
+        <a href="#carry">次の返答に引き継ぐ</a>
+        <a href="#references">仕様資料</a>
+      </nav>
+    </header>
+
+    <section id="display" aria-labelledby="display-title">
+      <h2 id="display-title">状況を表示する</h2>
+
+      <details id="info-card">
+        <summary><strong>日時・現在地カード</strong><span class="description">物語で確定した日時と場所を一枚のカードに表示する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>INFO風の表示で、いまの日時と居場所をひと目で確認したいとき。</dd>
+            <dt>試し方</dt><dd>行き先を提案しただけの返答と、実際に到着した返答を比べます。到着前は元の場所が表示されます。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-info-card.txt">GitHub原文</a><a href="#info-card">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="location-card">
+        <summary><strong>現在地カード</strong><span class="description">最後に確定した場所を表示する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>移動の多い作品で、いまいる場所だけを短く表示したいとき。</dd>
+            <dt>試し方</dt><dd>広場から移動したいと伝えます。広場を出たことがまだ確定していない返答では、広場の表示が続きます。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-location-card.txt">GitHub原文</a><a href="#location-card">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="character-status">
+        <summary><strong>キャラクターの現在状態</strong><span class="description">複数のキャラクターの名前と状態を一覧にする。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>同行者ごとの休憩や待機の状態をまとめて確認したいとき。</dd>
+            <dt>試し方</dt><dd>同行者の一人だけが休憩を終えた場面を試し、その人の状態だけが更新されることを確認します。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-character-status.txt">GitHub原文</a><a href="#character-status">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+    </section>
+
+    <section id="draft" aria-labelledby="draft-title">
+      <h2 id="draft-title">下書きに入れる</h2>
+
+      <details id="draft-action">
+        <summary><strong>行動の下書きボタン</strong><span class="description">決まった行動文をボタンでチャットの入力欄に追記する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>探索中によく使う「周囲を調べる」などの定型文をすぐ入力したいとき。</dd>
+            <dt>試し方</dt><dd>プレビューチャットでボタンを押します。文が入力欄に入り、プレイヤーが送信するまで物語は進みません。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-draft-action.txt">GitHub原文</a><a href="#draft-action">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="draft-choices">
+        <summary><strong>行動候補から下書き</strong><span class="description">その場面でAIが提案した行動から選んで入力する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>返答ごとに選べる行動が変わり、プレイヤーが送る前に文を編集できるようにしたいとき。</dd>
+            <dt>試し方</dt><dd>候補の一つを押し、入力された文を編集して送ります。物語は編集後に送信した文に沿って進みます。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-draft-choices.txt">GitHub原文</a><a href="#draft-choices">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="draft-builder">
+        <summary><strong>選択から下書き文を作る</strong><span class="description">行き先と目的を選び、一文にまとめて入力する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>訪問先と用件など、二つの選択を組み合わせて指示したいとき。</dd>
+            <dt>試し方</dt><dd>行き先だけを選び、次に目的も選びます。両方が揃ってから挿入でき、表示された文が下書きに入ります。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-draft-builder.txt">GitHub原文</a><a href="#draft-builder">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="mode-command">
+        <summary><strong>モードとコマンドの下書き</strong><span class="description">探索や休息などへの変更希望を入力欄に入れる。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>設定タブの操作と、物語の中で成立したモードの表示を分けたいとき。</dd>
+            <dt>試し方</dt><dd>探索中に「休息」を押して送信します。下書きの段階では探索のままで、物語で休息が成立した返答から表示が切り替わります。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-mode-command.txt">GitHub原文</a><a href="#mode-command">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+    </section>
+
+    <section id="carry" aria-labelledby="carry-title">
+      <h2 id="carry-title">次の返答に引き継ぐ</h2>
+
+      <details id="inventory-list">
+        <summary><strong>所持品一覧</strong><span class="description">手に入れた品と個数を、物語で確定した変化に合わせて更新する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>冒険中に拾った物や消耗品の残りを確認したいとき。</dd>
+            <dt>試し方</dt><dd>品を一つ受け取り、その品について話した後で使い切ります。表示は「1個」「1個」「なし」の順に変わります。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-inventory-list.txt">GitHub原文</a><a href="#inventory-list">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="keepsake-count">
+        <summary><strong>記念品カウンター</strong><span class="description">拾った記念品の累計を表示する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>収集イベントなどで、特定の品の合計だけを追いたいとき。</dd>
+            <dt>試し方</dt><dd>一つ拾ってから、その入手を思い出すだけの返答を試します。合計は一つのままです。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-keepsake-count.txt">GitHub原文</a><a href="#keepsake-count">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="wallet-ledger">
+        <summary><strong>簡単な所持金計算</strong><span class="description">確定した収入・支出から一種類の通貨の残高を表示する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>買い物や報酬のあとに所持金を見せたいとき。同じ返答内での取引の重複も試せます。</dd>
+            <dt>試し方</dt><dd>残高10から3を支払い、同じ返答内に同じ取引を重ねます。残高は7で、次の返答に収支がなければ7を引き継ぎます。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-wallet-ledger.txt">GitHub原文</a><a href="#wallet-ledger">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="task-list">
+        <summary><strong>約束と依頼の一覧</strong><span class="description">引き受けた未完の約束・依頼と、次の行動を表示する。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>受けた依頼や交わした約束を、会話が進んでも手帳のように見返したいとき。</dd>
+            <dt>試し方</dt><dd>依頼の提示、引き受け、完了を順に試します。引き受けた時点で載り、会話に出なくても完了するまで残ります。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-task-list.txt">GitHub原文</a><a href="#task-list">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+
+      <details id="facility-list">
+        <summary><strong>場所ごとの施設一覧</strong><span class="description">ダンジョンなどの施設を、階層や場所ごとにまとめる。</span></summary>
+        <div class="sample-body">
+          <dl>
+            <dt>使いどころ</dt><dd>拠点の設備や施設の場所を覚え、増設や移設を一覧へ反映したいとき。</dd>
+            <dt>試し方</dt><dd>工房の移設を提案した場面と、移設が完了した場面を比べます。完了した返答から工房が新しい場所へ移ります。</dd>
+          </dl>
+          <div class="sample-links"><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/sample-facility-list.txt">GitHub原文</a><a href="#facility-list">このサンプルへのリンク</a></div>
+        </div>
+      </details>
+    </section>
+
+    <section id="references" aria-labelledby="references-title">
+      <h2 id="references-title">仕様資料</h2>
+      <ul class="references">
+        <li><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/widget-reference.txt">ウィジェットの記法と登録欄</a><p>タグの書き方、起動条件、下書き、状態の引き継ぎ。</p></li>
+        <li><a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/chat-and-info-reference.txt">チャットの仕組みとINFO</a><p>各プロンプト欄の役割と、既存のINFO表示を調べて置き換える手順。</p></li>
+      </ul>
+      <a href="https://raw.githubusercontent.com/munn-nnuw/widget-reference/refs/heads/main/index.txt">GitHubの公開資料索引</a>
+    </section>
+  </main>
+  <script>
+    function openLinkedSample() {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target instanceof HTMLDetailsElement && !target.open) {
+        target.open = true;
+        target.scrollIntoView();
+      }
+    }
+
+    window.addEventListener("hashchange", openLinkedSample);
+    openLinkedSample();
+  </script>
+</body>
+</html>
