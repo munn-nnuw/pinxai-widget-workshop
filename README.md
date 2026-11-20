@@ -12,4 +12,6 @@
 
 ## サンプル集を更新する
 
-公開原文は [widget-reference](https://github.com/munn-nnuw/widget-reference) にあります。`samples.html` に用途別の紹介と試し方、原文へのリンクを載せます。既に共有されたサンプルのリンクを保つため、掲載済みの `details` の `id` は維持します。トップの代表例を変更する場合は `index.html` のリンク先も確認します。
+公開原文は [widget-reference](https://github.com/munn-nnuw/widget-reference) にあります。`samples.html` のサンプルを更新するときは、紹介と試し方、原文の冒頭から設置直前までを入れた `sample-source-notes`、設置から再現・確認までの各 `data-section` を照合します。原文を掲載する際は `<`、`>`、`&` をHTML用にエスケープします。相談チャット用のコピーは、依頼文とこれらの原文をつなげたものです。
+
+既に共有されたURLが使えるよう、掲載済みのサンプルの `id` は維持します。公開後にトップから一覧への遷移、相談チャット用の全文コピーと、自分で組み込む場合の欄別コピーを確認します。
